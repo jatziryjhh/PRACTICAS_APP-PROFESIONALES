@@ -99,12 +99,6 @@ class CustomUserCreationForm(UserCreationForm):
 
 #Segundo formulario (inicio de sesion)
 class CustomUserLoginForm(AuthenticationForm):
-    email = forms.EmailField(label="Correo electrónico", widget=forms.EmailInput(attrs={
-        'class': 'form-control',
-        'required': True,
-        'placeholder': 'Ingresa tu correo',
-        'title': 'Correo electrónico válido'
-    }))
     password = forms.CharField(label="Contraseña", widget=forms.PasswordInput(attrs={
         'class': 'form-control',
         'required': True,
