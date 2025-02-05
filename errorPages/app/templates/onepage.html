@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="conteiner">
+        <div class="col">
+            <div class="row">
+                <br>
+                <div class="col-6">
+                    <h1>Bienvenido a mi OnePage</h1>
+                    <br>
+                    <p>echale un vistazo a mis targetas</p>
+                </div>
+                <div class="col-6">
+                    <img class="img-fluid" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSoT-cUFmrBrwi3sLzuG-csigJHuJZajQvJ9Q&s" alt="aqui va una imagen">
+                </div>
+            </div>
+
+            <div class="row" id="targetas">
+                <div class="card col-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">
+                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod sequi tenetur excepturi obcaecati dolor ullam! Iure ab sed pariatur laudantium aut minima eum consectetur cupiditate placeat, at ullam, quaerat quo?
+                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui asperiores quidem expedita mollitia voluptatum doloremque architecto minima laboriosam alias, quaerat fugit molestias minus eaque vero enim illo temporibus modi veritatis.
+                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Aut, eaque omnis, est cupiditate at sapiente corrupti iusto nobis iure aperiam ipsam vero facilis ad et laudantium quae hic unde dolorem.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        //Logica para la generacion de targetas
+        function loadcards(title,text){
+            var card=document.createElement('div');
+            card.setAttribute('class','card col-4'); //atributo, a modificar, valor
+
+            var body=document.createElement('div');
+            body.setAttribute('class','card-body');
+
+            var h5=document.createElement('h5');
+            h5.setAttribute('class','card-title');
+            h5.innerHTML=title;
+
+            var p=document.createElement('p');
+            p.setAttribute('class','card-text');
+            p.innerHTML=text;
+
+            body.appendChild(h5);
+            body.appendChild(p);
+            card.appendChild(body);
+
+            document.getElementById('targetas').appendChild(card);
+        }
+
+        var i = 1;
+        window.addEventListener('scroll', () => {
+            if ((window.innerHeight + window.scrollY) >= 
+            document.body.offsetHeight -10) {
+                for(let index=0; index<5; index++){
+                    if(i>100){
+                        break;
+                    }
+                    var object={
+                        title:'Esta es la card:'+ i,
+                        text:'Este es el texto generico de la card: '+ i
+                    }
+                    loadcards(object.title,object.text);
+                    i++;
+                }
+            }
+        });
+
+    </script>
+</body>
+</html>

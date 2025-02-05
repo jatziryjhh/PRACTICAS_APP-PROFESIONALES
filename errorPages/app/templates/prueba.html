@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <!-- como mostrar infromacion que viene en el back-->
+    {% if objeto %}
+    <!-- todo lo que este aqui se va a pintar-->
+    <h1>{{ objeto.id }}-{{ objeto.titulo }}</h1>
+    <p>{{ objeto.descripcion }}</p>
+    {% endif %}
+
+    <!-- como mostrar infromacion que viene en el back-->
+    {% if arreglo %}
+    <ul>
+        {% for objeto in arreglo %}
+        <li>{{objeto.titulo}}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    <form>
+        <!-- si el form no tiene action es un get -->
+        <input type="text" placeholder="Ingrese texto" name="texto" />
+        <button type="submit">Enviar</button>
+    </form>
+
+    <!-- aqui es despues de la base -->
+    <h1 style="color: pink; font-family: 'Courier New', Courier, monospace; text-align: center; border-bottom: 2px solid pink; padding-bottom: 10px;">Esto es despues de la base</h1>
+    {% if lista %}
+    <ul style="list-style-type: none; padding: 0; font-family: 'Courier New', Courier, monospace;">
+        {% for persona in lista %}
+            <li style="background-color: #ffe4e1; margin: 5px 0; padding: 10px; border-radius: 10px; border: 1px solid pink;">
+                <strong>{{persona.nombres}} {{persona.apellidos}}</strong>, {{persona.edad}} años
+            </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+</body>
+
+</html>

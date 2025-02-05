@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- CDN de SweetAlert -->
+    <style>
+        body {
+            background-color: #ffe4e1;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0 10px 0;
+            border: 1px solid #ff0998;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body class="flex items-center justify-center min-h-screen">
+    <div class="bg-white p-8 rounded-2xl shadow-lg w-96 border-2 border-pink-300">
+        <h2 class="text-center text-2xl font-semibold text-pink-600 mb-4">Bienvenide</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="button w-full text-black py-2 rounded-lg hover:bg-pink-600 transition">
+                Iniciar Sesion
+            </button>
+        </form>
+    </div>
+
+    <script>
+        // Verifica si existe el mensaje de error en la variable 'message' (que pasamos desde la vista)
+        {% if message %}
+        const message = {{ message| safe }};
+
+        // Mostrar el mensaje con SweetAlert
+        Swal.fire({
+            icon: message.icon,
+            title: message.title,
+            text: message.text,
+            confirmButtonText: 'Aceptar',
+            confirmButtonColor: '#ff0998'
+        });
+        {% endif %}
+    </script>
+</body>
+
+</html>
