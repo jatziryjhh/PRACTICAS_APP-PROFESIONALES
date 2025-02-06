@@ -72,7 +72,8 @@ class CustomUserCreationForm(UserCreationForm):
                     'required': True,
                     'pattern': '^(I)?\d{5}[a-zA-Z]{2}\d{3}$',
                     'title': 'Tu formato es valido con ingenieria o sin ella, pero de la UTEZ',
-                    'placeholder': 'Ingresa tu numero de control'
+                    'placeholder': 'Ingresa tu numero de control',
+                    'maxlength':20
                 }
             ),
             'age': forms.NumberInput(
@@ -81,7 +82,9 @@ class CustomUserCreationForm(UserCreationForm):
                     'required': True,
                     'pattern': '^[0-9]{2,}$',
                     'title': 'Solo se permiten numeros',
-                    'placeholder': 'Ingresa tu edad'
+                    'placeholder': 'Ingresa tu edad',
+                    'minlength':1,
+                    'maxlength':100
                 }
             ),
             'tel': forms.NumberInput(
@@ -91,14 +94,19 @@ class CustomUserCreationForm(UserCreationForm):
                     'pattern': '^\d{10}$',
                     'title': 'Debe ser un número de 10 dígitos',
                     'placeholder': 'Ingresa tu teléfono',
-                    'minlength': '10',
-                    'maxlength': '10'}
+                    'maxlength': '15'}
             )
         }
 
 
 #Segundo formulario (inicio de sesion)
 class CustomUserLoginForm(AuthenticationForm):
+    email = forms.EmailField(label="Correo electrónico", widget=forms.EmailInput(attrs={
+        'class': 'form-control',
+        'required': True,
+        'placeholder': 'Ingresa tu correo electrónico',
+        'title': 'Correo electrónico de la UTEZ'
+    }))
     password = forms.CharField(label="Contraseña", widget=forms.PasswordInput(attrs={
         'class': 'form-control',
         'required': True,

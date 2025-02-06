@@ -3,7 +3,9 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from .forms import CustomUserCreationForm, CustomUserLoginForm
 from django.contrib.auth.decorators import login_required
-from .message import Message 
+from .message import Message
+
+#el views es mi back
 
 def register_view(request):
     if request.method == 'POST':
