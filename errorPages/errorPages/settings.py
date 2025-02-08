@@ -140,9 +140,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 HANDER404='app.views.error_404_view'
 HANDER500='app.views.error_500_view'
 
-#no me los roben,porfis:(
-#SEARCH_ENGINE_ID='e4c89ecf1e32d448c'
-#GOOGLE_API_KEY='AIzaSyAST2GdnTEt6cVcKC2jmzNVF7utaYVGkk8'
+
 
 AUTH_USER_MODEL='users.CustomUser'
 
