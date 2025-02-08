@@ -21,35 +21,25 @@ def register_view(request):
 
 def login_view(request):
     if request.method == 'POST':
-        form = CustomUserLoginForm(data=request.POST)
+        form = CustomUserLoginForm(request=request,data=request.POST)
         if form.is_valid():
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
             
-            # Authenticate el usuario
             user = authenticate(request, username=email, password=password)
+            
             if user is not None:
                 login(request, user)
                 return redirect('home')
             else:
-                message = {
-                    "icon": "error",
-                    "title": "Error de inicio de sesión",
-                    "text": "Correo o contraseña incorrectos."
-                }
-                return render(request, 'login.html', {"form": form, "message": message})
-        else:
-            message = {
-                "icon": "error",
-                "title": "Error en el formulario",
-                "text": "Por favor, verifica que todos los campos estén correctamente llenados."
-            }
-            return render(request, 'login.html', {"form": form, "message": message})
-
+                message = Message(
+                    "danger", "Credenciales incorrectas", 
+                    400, 
+                    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8MIbugIhZBykSmQcR0QPcfnPUBOZQ6bm35w&s")
+                return render(request, "login.html", {"message":json.dumps(message.to_dict())})
     else:
         form = CustomUserLoginForm()
-
-    return render(request, 'login.html', {'form': form})
+    return render(request, 'home.html', {'form': form})
 
 
 def logout_view(request):
@@ -58,7 +48,7 @@ def logout_view(request):
         "info", "Se a cerrado session exitosamente", 
         200, 
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8MIbugIhZBykSmQcR0QPcfnPUBOZQ6bm35w&s")
-    return render(request, "login.html", {"message":json.dumps(message.to_dict())})
+    return render(request, "login.html", {"message":(message.to_dict())})
     
 #la etiqueta de @ significa que es seguridad de django
 @login_required
