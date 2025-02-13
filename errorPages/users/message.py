@@ -10,8 +10,8 @@ class Message:
 
     def to_dict(self):
         return {
-            "type": self.type,
-            "message": self.message,
-            "code": self.code,
-            "img": self.img
+            "tipo": self.type,
+            "mensaje": self.message,
+            "codigo": self.code,
+            "Imagen": self.img
         }

@@ -5,126 +5,50 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iniciar Sesión</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- CDN de SweetAlert -->
     <style>
         body {
             background-color: #ffe4e1;
-            font-family: 'Arial', sans-serif;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .form-container {
-            background-color: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 400px;
-            border: 2px solid #ff0998;
-        }
-
-        .form-container h2 {
-            color: #ff0998;
-            text-align: center;
-            margin-bottom: 20px;
         }
 
         input {
             width: 100%;
-            padding: 12px;
-            margin: 10px 0;
+            padding: 10px;
+            margin: 5px 0 10px 0;
             border: 1px solid #ff0998;
             border-radius: 5px;
-            box-sizing: border-box;
-        }
-
-        input:focus {
-            border-color: #ff66b2;
-            outline: none;
-        }
-
-        .btn-submit {
-            background-color: #ff0998;
-            color: white;
-            width: 100%;
-            padding: 12px;
-            border-radius: 5px;
-            border: none;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .btn-submit:hover {
-            background-color: #ff66b2;
-        }
-
-        .link-container {
-            text-align: center;
-            margin-top: 15px;
-        }
-
-        .link-container a {
-            color: #ff0998;
-            text-decoration: none;
-        }
-
-        .link-container a:hover {
-            text-decoration: underline;
         }
     </style>
 </head>
 
-<body>
-    <div class="form-container">
-        <h2>Bienvenide</h2>
-        <form method="post" onsubmit="return validateForm()">
+<body class="flex items-center justify-center min-h-screen">
+    <div class="bg-white p-8 rounded-2xl shadow-lg w-96 border-2 border-pink-300">
+        <h2 class="text-center text-2xl font-semibold text-pink-600 mb-4">Bienvenide</h2>
+        <form method="post">
             {% csrf_token %}
             {{ form.as_p }}
-            <button type="submit" class="btn-submit">
-                Iniciar Sesión
+            <button type="submit" class="button w-full text-black py-2 rounded-lg hover:bg-pink-600 transition">
+                Iniciar Sesion
             </button>
         </form>
     </div>
+
     <script>
-        function validateLogin() {
-            let email = document.getElementById('id_email').value;
-            let password = document.getElementById('id_password').value;
+        // Verifica si existe el mensaje de error en la variable 'message' (que pasamos desde la vista)
+        {% if message %}
+        const message = {{ message| safe }};
 
-            const regex_email = /^[a-zA-Z0-9._%+-]+@utez\.edu\.mx$/;
-            const min_password = 8;
-
-            if (!regex_email.test(email)) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'El correo debe ser de la UTEZ'
-                });
-                return false;
-            }
-
-            if (password.length < min_password) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'La contraseña debe tener al menos 8 caracteres'
-                });
-                return false;
-            }
-        }
+        // Mostrar el mensaje con SweetAlert
+        Swal.fire({
+            icon: message.icon,
+            title: message.title,
+            text: message.text,
+            confirmButtonText: 'Aceptar',
+            confirmButtonColor: '#ff0998'
+        });
+        {% endif %}
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
-    {% include 'mensaje.html' %}
 </body>
 
 </html>
