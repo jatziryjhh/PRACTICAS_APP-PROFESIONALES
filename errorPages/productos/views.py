@@ -1,6 +1,8 @@
 from django.shortcuts import render,redirect
 from .models import Producto
 from .forms import ProductoForm
+from django.shortcuts import get_object_or_404
+
 
 #este objeto me permite devolver un objeto en forma de JSON
 from django.http import JsonResponse
@@ -74,4 +76,50 @@ def registrar_producto(request):
         'error':'El metodo no esta soportado',
         },status=405
     )        
-       
+
+#funciones para el método PUT
+def actualizar_producto(request,id_producto):
+    #checar si nuestra request es de tipo PUT
+    if request.method == 'PUT':
+        producto=get_object_or_404(Producto,id=id_producto)
+        try:
+            #la informacion de la modificacion del producto viene del body del request
+            data=json.loads(request.body)
+            #actualizo el producto
+            producto.nombre=data.get('nombre',producto.nombre)
+            producto.precio=data.get('precio',producto.precio)
+            producto.Imagen=data.get('Imagen',producto.Imagen)
+            producto.save()
+            return JsonResponse(
+                {
+                'mensaje':'Actualizacion exitosa'
+                },status=200)
+        except Exception as e:
+            return JsonResponse(
+                {
+                'error':str(e),
+                },status=400
+            )
+    #si no es put el request
+    return JsonResponse({'error':'El metodo no es PUT'},status=405)
+            
+#funciones para delete
+def borrar_producto(request,id_producto):
+    if request.method == 'DELETE':
+        producto=get_object_or_404(Producto,id=id_producto)
+        producto.delete() #<!-- borra fisicamente el registro de la BD
+        return JsonResponse({'mensaje':'Producto eliminado'},status=200)
+    return JsonResponse({'error':'El metodo no es DELETE',},status=405)
+        
+#funcion adicional para get
+#de retornar un producto en especifico
+def obtener_producto(request,id_producto):
+    if request.method == 'GET':
+        producto=get_object_or_404(Producto,id=id_producto)
+        data={
+            'nombre':producto.nombre,
+            'precio':producto.precio,
+            'Imagen':producto.Imagen
+        }
+        return JsonResponse(data,status=200)
+    return JsonResponse({'error':'El metodo no es GET'},status=405)

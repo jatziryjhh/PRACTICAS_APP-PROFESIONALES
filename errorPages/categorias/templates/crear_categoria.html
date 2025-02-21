@@ -1,29 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agregar Categoría</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
     <style>
         body {
             background-color: #ffe4e1;
             font-family: 'Georgia', serif;
             text-align: center;
         }
-        .container {
-            max-width: 500px;
+
+        .container-fluid {
+            margin-top: 50px;
+        }
+
+        .form-container,
+        .categorias-container {
             background: #fff;
             padding: 20px;
             border-radius: 15px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            margin-top: 50px;
+            min-height: 400px;
         }
+
         h1 {
             color: #d63384;
             font-weight: bold;
         }
+
         button {
             background-color: #ff69b4;
             border: none;
@@ -32,10 +43,13 @@
             color: white;
             font-size: 16px;
             transition: background 0.3s;
+            width: 100%;
         }
+
         button:hover {
             background-color: #d63384;
         }
+
         a {
             display: block;
             margin-top: 15px;
@@ -43,20 +57,130 @@
             text-decoration: none;
             font-weight: bold;
         }
+
         a:hover {
             text-decoration: underline;
         }
+
+        #mensaje {
+            margin-top: 10px;
+            font-weight: bold;
+            color: green;
+        }
+
+        .categoria-card {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 10px;
+            width: 100%;
+        }
+
+        .categoria-card img {
+            max-width: 80px;
+            height: auto;
+            border-radius: 10px;
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
-        <h1>Registrar Nueva Categoría</h1>
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" class="btn w-100">Registrar</button>
-        </form>
-        <a href="{% url 'ver' %}">Ver categorías</a>
+        <div class="col">
+            <div class="row">
+                <div class="col-6 mt-4">
+                    <h1>Registrar nueva categoria</h1>
+                    <form method="post" id="categoriasForm">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit">Registrar</button>
+                    </form>
+                    <p id="mensaje"></p>
+                    <a href="{% url 'ver' %}">Ver categorias</a>
+                </div>
+                <!-- vista-->
+                <div class="col-6 mt-4">
+                    <h1> Vista categorias</h1>
+                    <div class="row" id="categorias">
+                    </div>
+                </div>
+
+            </div>
+        </div>
     </div>
+
+    <script>
+        var form = document.getElementById('categoriasForm');
+        form.addEventListener('submit', function (event) {
+            //Que no se va a mandar el form a la vista que hace render
+            event.preventDefault();
+
+            //necesito la informacion
+            let formData = new FormData(this);
+
+            //convertir el formdata en json
+            let jsonData = {};
+            //en este contexto el values es el valor del input y el key es el name del input
+            formData.forEach((value, key) => {
+                jsonData[key] = value;
+                //'nombre': 'valor'
+
+                //enviar esta informacion al endpoint
+                fetch('/categorias/api/post/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getToken('')//WP
+                    },
+                    body: JSON.stringify(jsonData)
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('mensaje').innerText = data.mensaje;
+                        //cargar las categorias
+                        cargarCategorias();
+                    })
+                    .catch(error => console.error('Error:', error));
+            });
+        });
+        //funcion para obtener el csrf token en js
+        function getToken() {
+            let cookieValue = null;
+            let cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                let cookie = cookies[i].trim();
+                if (cookie.startsWith('csrftoken=')) {
+                    cookieValue = cookie.substring('csrftoken='.length, cookie.length);
+                    break;
+                }
+            }
+            return cookieValue;
+        }
+    </script>
+    <script>
+        function cargarCategorias() {
+            fetch('/categorias/api/get/')
+                .then(response => response.json())
+                .then(data => {
+                    let categoriasDiv = document.getElementById('categorias');
+                    categoriasDiv.innerHTML = '';
+                    data.forEach(categoria => {
+                        let categoriaDiv = document.createElement('div');
+                        categoriaDiv.classList.add('col-md-4', 'd-flex', 'justify-content-center');
+                        categoriaDiv.innerHTML = `
+                            <div class="categoria-card">
+                                <img src="${categoria.imagen}" alt="Imagen de ${categoria.nombre}">
+                                <h5>${categoria.nombre}</h5>
+                            </div>
+                        `;
+                        categoriasDiv.appendChild(categoriaDiv);
+                    });
+                })
+                .catch(error => console.error("Error:", error));
+        }
+        cargarCategorias();
+    </script>
 </body>
+
 </html>
