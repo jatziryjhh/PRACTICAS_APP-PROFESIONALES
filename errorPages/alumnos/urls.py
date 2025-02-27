@@ -4,7 +4,7 @@ from .views import *
 
 #un ruteador para poder hacer las peticiones
 router = SimpleRouter()
-router.register(r'api', ProductoViewset)
+router.register(r'api', AlumnosViewset)
 
 urlpatterns = [
     path('',include(router.urls)),
