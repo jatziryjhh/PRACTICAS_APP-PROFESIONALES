@@ -97,17 +97,15 @@
                     productosDiv.innerHTML = '';
                     data.forEach(producto => {
                         productosDiv.innerHTML +=
-                        `<div class="col-3"><strong>${producto.nombre}</strong>-
+                            `<div class="col-3"><strong>${producto.nombre}</strong>-
                         $ ${producto.precio} <br>
                         <img src="${producto.Imagen}" alt="X"width="200">
                         </div>`
                     });
                 })
-                .catch(error=>console.error('Error:', error));
+                .catch(error => console.error('Error:', error));
         }
-
         cargarProductos();
-
     </script>
 </body>
 

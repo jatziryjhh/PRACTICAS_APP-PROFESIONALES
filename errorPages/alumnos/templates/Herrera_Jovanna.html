@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <title>UII_T5 Consumir API con JS</title>
+</head>
+<style>
+    body {
+        background-color: #f8f0f5;
+        font-family: 'Arial', sans-serif;
+        text-align: center;
+    }
+
+    .container-fluid {
+        margin-top: 50px;
+    }
+
+    .form-container{
+        background: #ffffff;
+        padding: 30px;
+        border-radius: 5px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+    .alumnos-container {
+        background: #ffffff;
+        padding: 10px;
+        border-radius: 5px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+        color: #d63384;
+        font-weight: bold;
+    }
+
+    button {
+        background-color: #ff69b4;
+        border: none;
+        padding: 12px;
+        border-radius: 20px;
+        color: white;
+        font-size: 16px;
+        width: 100%;
+        transition: background 0.3s;
+    }
+
+    button:hover {
+        background-color: #d63384;
+        cursor: pointer;
+    }
+
+    a {
+        display: block;
+        margin-top: 20px;
+        color: #d63384;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+    #mensaje {
+        margin-top: 15px;
+        font-weight: bold;
+        color: #28a745;
+    }
+
+    .table th,
+    .table td {
+        text-align: center;
+    }
+
+    .table .actiones button {
+        margin: 0 5px;
+    }
+
+    .row {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+    }
+
+    .col-6 {
+        width: 40%;
+    }
+</style>
+
+<body>
+    <header class="bg-pink text-black text-center py-1 mt-4">
+        <h2>Gestión de Alumnos</h2>
+    </header>
+    <div class="container">
+        <div class="row">
+            <div class="col-4 mt-4 form-container">
+                <h1>Registrar nuevo alumno</h1>
+                <form method="post" id="alumnosForm">
+                    {% csrf_token %}
+                    <input type="hidden" id="id_alumnos" name="id_alumnos">
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </form>
+                <p id="mensaje"></p>
+            </div>
+
+            <!-- Vista de alumnos -->
+            <div class="col-7 mt-4 alumnos-container">
+                <h1>Vista de alumnos</h1>
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>Edad</th>
+                            <th>Matrícula</th>
+                            <th>Correo</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="alumnos">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var form = document.getElementById('alumnosForm');
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            let formData = new FormData(this);
+            let jsonData = {};
+            formData.forEach((value, key) => {
+                jsonData[key] = value;
+            });
+
+            let id = document.getElementById('id_alumnos').value;
+            let url = '/alumnos/api/';
+            let method = 'POST';
+
+            if (id) {
+                url += id + '/';
+                method = 'PUT';
+            }
+
+            fetch(url, {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(jsonData)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('mensaje').innerHTML = data.mensaje;
+                    cargarAlumnos();
+                    limpiarFormulario();
+                })
+                .catch(error => console.error('Error:', error));
+        });
+
+        function cargarAlumnos() {
+            fetch('/alumnos/api/')
+                .then(response => response.json())
+                .then(data => {
+                    let alumnosDiv = document.getElementById('alumnos');
+                    alumnosDiv.innerHTML = '';
+                    data.forEach(alumno => {
+                        alumnosDiv.innerHTML += `
+                            <tr>
+                                <td>${alumno.nombre}</td>
+                                <td>${alumno.apellido}</td>
+                                <td>${alumno.edad}</td>
+                                <td>${alumno.matricula}</td>
+                                <td>${alumno.correo}</td>
+                                <td class="acciones">
+                                    <div style="display: flex; gap: 5px;">
+                                        <button class="btn btn-warning btn-sm" onclick="cargarAlumno(${alumno.id})"><i class="fas fa-pencil-alt"></i> </button>
+                                        <button class="btn btn-danger btn-sm" onclick="eliminarAlumno(${alumno.id})"><i class="fas fa-trash-alt"></i> </button>
+                                    </div>
+                                </td>
+                            </tr>`;
+                    });
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        function cargarAlumno(id) {
+            fetch(`/alumnos/api/${id}/`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('id_alumnos').value = data.id;
+                    document.getElementsByName('nombre')[0].value = data.nombre;
+                    document.getElementsByName('apellido')[0].value = data.apellido;
+                    document.getElementsByName('edad')[0].value = data.edad;
+                    document.getElementsByName('matricula')[0].value = data.matricula;
+                    document.getElementsByName('correo')[0].value = data.correo;
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        function eliminarAlumno(id) {
+            if (confirm('¿Estás seguro de que deseas eliminar este alumno?')) {
+                fetch(`/alumnos/api/${id}/`, { method: 'DELETE' })
+                    .then(() => {
+                        document.getElementById('mensaje').innerText = 'Alumno eliminado';
+                        cargarAlumnos();
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
+        }
+
+        function limpiarFormulario() {
+            document.getElementById('alumnosForm').reset();
+            document.getElementById('id_alumnos').value = '';
+        }
+
+        cargarAlumnos();
+    </script>
+    
+    <footer class="footer text-center mt-4 ">
+        <p>Herrera Hernández Jovanna Jatziry 8° "B"-IDGS</p>
+    </footer>
+</body>
+
+</html>
