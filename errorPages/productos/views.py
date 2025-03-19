@@ -2,6 +2,8 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework import viewsets
 from .models import Producto
 from .serializers import ProductoSerializer
+from .forms import ProductoForm
+from django.shortcuts import render, redirect
 
 #clase que serializa los productos
 class ProductoViewset(viewsets.ModelViewSet):
@@ -16,3 +18,7 @@ class ProductoViewset(viewsets.ModelViewSet):
     #GET, POST, PUT, DELETE
     #por defecto si no lo declaro, se usan todos
     #http_method_names = ['GET', 'POST']
+    
+def agregar_view(request):
+   form = ProductoForm()
+   return render(request, 'agregar.html', {'form': form})

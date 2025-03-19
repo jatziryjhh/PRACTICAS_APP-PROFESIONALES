@@ -10,9 +10,73 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
+    <style>
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                /*no se ve*/
+            }
+
+            to {
+                opacity: 1;
+                /*se ve*/
+            }
+        }
+
+        .page {
+            animation: fadeIn 5.0s forwards;
+        }
+
+        @keyframes slide {
+            from {
+                transform: translateX(100%);
+            }
+
+            to {
+                transform: translateX(0);
+            }
+        }
+
+        .page {
+            animation: slide 5.0s forwards;
+        }
+
+        @keyframes zoomIn {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1.0);
+                opacity: 1;
+            }
+        }
+
+        .page {
+            animation: zoomIn 5.0s forwards;
+        }
+
+        @keyframes zoomOut {
+            from {
+                transform: scale(1.0);
+                opacity: 1;
+            }
+
+            to {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+        }
+
+        .page {
+            animation: zoomIn 5.0s forwards;
+        }
+
+    </style>
 </head>
 
-<body>
+<body class="page">
     <div class="container">
         <div class="col">
             <div class="row">
@@ -35,7 +99,19 @@
 
             </div>
         </div>
+        <a href="https://www.utez.edu.mx">Salir de la página</a>
     </div>
+    <script>
+        document.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', function (event) {
+                event.preventDefault();
+                document.body.style.animation = 'zoomOut 5.0s forwards';
+                setTimeout(() => {
+                    window.location.href = this.href;
+                }, 5000);
+            });
+        });
+    </script>
 
     <script>
         var form = document.getElementById('productoForm');

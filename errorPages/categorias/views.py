@@ -2,7 +2,8 @@ from django.shortcuts import render,redirect
 from .models import Categoria
 from django.http import JsonResponse
 from .forms import CategoriaForm
-
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
 
 def lista_categorias(request):
     categorias = Categoria.objects.all()
@@ -31,6 +32,7 @@ def crear_categoria(request):
     return render(request, 'crear_categoria.html', {'form': form})
 
 import json
+@csrf_exempt
 #funcione que agrega un categoria con un objeto JSON
 def registrar_categorias(request):
     #checar si nuestra request es de tipo POST
