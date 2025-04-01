@@ -45,6 +45,39 @@ const UserDataTable = ({ data, loading }) => {
     },
   ];
 
+  // Función para eliminar un usuario
+  const handleDelete = (user) => {
+    // Verificar si el usuario logueado está intentando eliminarse a sí mismo
+    if (user.id === sesion) {
+      setMessage("No puedes eliminarte a ti mismo.");
+      return;
+    }
+
+    // Confirmar la eliminación
+    const isConfirmed = window.confirm(
+      `¿Estás seguro de que quieres eliminar a ${user.name}?`
+    );
+    if (isConfirmed) {
+      // Hacer la solicitud DELETE a la API para eliminar al usuario
+      axios
+        .delete(`http://127.0.0.1:8000/users/api/${user.id}/`, {
+          headers: {
+            Authorization: `Bearer ${sesion}`, // Pasar el token de acceso en los headers
+          },
+        })
+        .then((response) => {
+          setMessage(`Usuario ${user.name} eliminado correctamente.`);
+        })
+        .catch((error) => {
+          setMessage(
+            `Error al eliminar el usuario: ${
+              error.response?.data?.detail || error.message
+            }`
+          );
+        });
+    }
+  };
+
   // Función para manejar la edición
   const handleEdit = (user) => {
     setEditingUserId(user.id); // Establecemos el ID del usuario a editar
@@ -65,7 +98,8 @@ const UserDataTable = ({ data, loading }) => {
   return (
     <div>
       <h3>Tabla de Usuarios</h3>
-      {message && <div className="alert alert-info">{message}</div>} {/* Mostrar el mensaje */}
+      {message && <div className="alert alert-info">{message}</div>}{" "}
+      {/* Mostrar el mensaje */}
       <DataTable
         columns={columns}
         data={data}
@@ -74,7 +108,6 @@ const UserDataTable = ({ data, loading }) => {
         highlightOnHover
         pointerOnHover
       />
-
       {/* Mostrar el formulario de edición en un modal */}
       {showEditModal && (
         <EditUserForm
