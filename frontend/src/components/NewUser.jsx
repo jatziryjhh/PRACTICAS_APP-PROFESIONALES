@@ -67,7 +67,8 @@ const CustomUserForm = () => {
         <div
           className="spinner-border text-primary"
           style={{ width: "5rem", height: "5rem" }}
-          role="status">
+          role="status"
+        >
           <span className="visually-hidden">Cargando...</span>
         </div>
       </div>
@@ -76,44 +77,44 @@ const CustomUserForm = () => {
 
   return (
     <motion.div
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0, transition: { duration: 0.5 } }}
-              exit={{ opacity: 0, y: -50, transition: { duration: 0.5 } }}
-              className="page"
-            >
-    <div>
-      <h1>Nuevo Usuario</h1>
-      <form onSubmit={handleSubmit}>
-        {formFields &&
-          Object.keys(formFields).map((field) => {
-            const { label, input, type } = formFields[field];
-            return (
-              <div key={field}>
-                <label htmlFor={input.id}>{label}</label>
-                <input
-                  {...input}
-                  value={formData[field] || ""}
-                  onChange={handleInputChange}
-                  name={field}
-                  type={type || "text"}
-                />
-                {errors[field] && (
+      initial={{ opacity: 0, y: 50 }}
+      animate={{ opacity: 1, y: 0, transition: { duration: 0.5 } }}
+      exit={{ opacity: 0, y: -50, transition: { duration: 0.5 } }}
+      className="page"
+    >
+      <div>
+        <h1>Nuevo Usuario</h1>
+        <form onSubmit={handleSubmit}>
+          {formFields &&
+            Object.keys(formFields).map((field) => {
+              const { label, input, type } = formFields[field];
+              return (
+                <div key={field}>
+                  <label htmlFor={input.id}>{label}</label>
+                  <input
+                    {...input}
+                    value={formData[field] || ""}
+                    onChange={handleInputChange}
+                    name={field}
+                    type={type || "text"}
+                  />
+                  {errors[field] && (
                     <span autoFocus className="text-danger">
-                        {errors[field].map((errorMsg, index) => (
-                            <span>
-                            <i className="bi bi-exclamation-circle-fill me-1"></i>
-                            {errorMsg}
-                            </span>
-                        ))}
+                      {errors[field].map((errorMsg, index) => (
+                        <span key={index}>
+                          <i className="bi bi-exclamation-circle-fill me-1"></i>
+                          {errorMsg}
+                        </span>
+                      ))}
                     </span>
-                    )}
-                <br />
-              </div>
-            );
-          })}
-        <button type="submit">Enviar</button>
-      </form>
-    </div>
+                  )}
+                  <br />
+                </div>
+              );
+            })}
+          <button type="submit">Enviar</button>
+        </form>
+      </div>
     </motion.div>
   );
 };

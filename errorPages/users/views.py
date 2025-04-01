@@ -4,6 +4,8 @@ from .serializers import *
 from .models import CustomUser
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.renderers import JSONRenderer
+from rest_framework.response import Response
+from rest_framework import status
 
 
 #Hacer las vistas del API_REST de usuarios
@@ -23,6 +25,13 @@ class UserViewSets(viewsets.ModelViewSet):
             return[IsAuthenticated()]
         return[]
     
+    def destroy(self, request, *args, **kwargs):
+        user = self.get_object()
+        if user.id == request.user.id:
+            return Response({"detail": "No puedes eliminarte a ti mismo."}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Si no es el usuario logueado, procedemos con la eliminación
+        return super().destroy(request, *args, **kwargs)
 
 #Hacer una vista que devuelva el token
 from rest_framework_simplejwt.views import TokenObtainPairView

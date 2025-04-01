@@ -19,5 +19,15 @@ export const logout = () => {
   localStorage.removeItem("refreshToken");
 };
 
-//To do
-//crear un metodo que jale la informacion del usuario
+/// Método para refrescar el token
+export const refreshToken = async () => {
+  const refreshToken = localStorage.getItem("refreshToken");
+  if (refreshToken) {
+    try {
+      const response = await axios.post("http://127.0.0.1:8000/users/token/refresh/", { refresh: refreshToken });
+      localStorage.setItem("accessToken", response.data.access);
+    } catch (error) {
+      console.error("Error al refrescar el token", error);
+    }
+  }
+};

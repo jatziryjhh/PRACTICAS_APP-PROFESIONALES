@@ -4,6 +4,8 @@ import Swal from "sweetalert2";
 import { logout } from "../services/authService"; // Importamos la función logout
 
 const Navbar = () => {
+  const sesion = localStorage.getItem("accessToken"); // Verificamos si hay un token en el localStorage
+
   const handleLogout = () => {
     Swal.fire({
       title: "¿Estás seguro?",

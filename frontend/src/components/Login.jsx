@@ -7,15 +7,19 @@ const Login = ({ onLoginSuccess }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const nav = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       await login(username, password);
       nav("/");
     } catch (err) {
       setError("Credenciales incorrectas");
+    }finally {
+      setLoading(false);
     }
   };
 
@@ -57,8 +61,8 @@ const Login = ({ onLoginSuccess }) => {
               />
             </div>
 
-            <button type="submit" className="btn btn-primary w-100 mb-3">
-              Entrar
+            <button type="submit" className="btn btn-primary w-100 mb-3" disabled={loading}>
+              {loading ? "Cargando..." : "Entrar"} {/* Muestra el texto dependiendo de si está cargando */}
             </button>
           </form>
           <div className="text-center">
