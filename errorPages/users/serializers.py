@@ -10,7 +10,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
         fields='__all__'
         
 #Serializador para los tokens
-class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+class CustomTokenObtainPairSelializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
