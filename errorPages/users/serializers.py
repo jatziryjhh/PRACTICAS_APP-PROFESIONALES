@@ -18,3 +18,17 @@ class CustomTokenObtainPairSelializer(TokenObtainPairSerializer):
         token['email'] = user.email
         #se pueden agregar mas campos
         return token
+    
+class CustomUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = [
+            'id',
+            'email',
+            'name',
+            'surname',
+            'control_number',
+            'age',
+            'tel',
+            'join_date'
+        ]

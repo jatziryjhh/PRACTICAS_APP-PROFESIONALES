@@ -26,12 +26,17 @@ class UserViewSets(viewsets.ModelViewSet):
         return[]
     
     def destroy(self, request, *args, **kwargs):
-        user = self.get_object()
-        if user.id == request.user.id:
-            return Response({"detail": "No puedes eliminarte a ti mismo."}, status=status.HTTP_400_BAD_REQUEST)
-        
-        # Si no es el usuario logueado, procedemos con la eliminación
+        user_to_delete = self.get_object()
+
+        # Si el usuario autenticado es el mismo que el usuario que intenta eliminarse, lo bloqueamos
+        if request.user == user_to_delete:
+            return Response(
+                {"error": "No puedes eliminarte a ti mismo."},
+                status=status.HTTP_403_FORBIDDEN
+            )
+
         return super().destroy(request, *args, **kwargs)
+
 
 #Hacer una vista que devuelva el token
 from rest_framework_simplejwt.views import TokenObtainPairView
