@@ -69,6 +69,12 @@ const Login = ({ onLoginSuccess }) => {
                     Registrate
                   </Link>
                 </div>
+                <div className="text-center">
+                  <strong>¿No recuerdas tu contraseña?<br /></strong>
+                  <Link className="" to="/recuperar">
+                    Recuperar contraseña
+                  </Link>
+                </div>
             </div>
     </div>
     

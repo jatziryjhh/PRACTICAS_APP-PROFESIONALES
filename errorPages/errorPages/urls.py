@@ -18,8 +18,6 @@ from django.contrib import admin
 from django.urls import path
 from app.views import *
 from django.urls import path, include
-#include es para incluir las urls de otro archivo
-
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -30,7 +28,6 @@ urlpatterns = [
     path('search/',search_view, name='search'), 
     path('error_logs/', error_logs, name='error_logs'),
     path('api/error_logs/', get_error_logs, name='get_error_logs'),
-    #aqui ya es para userss
     path('users/', include('users.urls')),
     path('productos/', include('productos.urls')),
     path('categorias/', include('categorias.urls')),

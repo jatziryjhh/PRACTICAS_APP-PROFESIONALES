@@ -174,3 +174,15 @@ AUTH_USER_MODEL='users.CustomUser'
 LOGIN_URL = '/users/login/'
 LOGIN_REDIRECT_URL = '/home' # Dónde irán los usuarios tras iniciar sesión
 LOGOUT_REDIRECT_URL = '/users/login/'
+
+#recuperación de contraseña
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+#Configuración para Gmail
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+# Usar su correo de UTEZ
+EMAIL_HOST_USER = "20223tn062@utez.edu.mx"
+# Obtener de https://myaccount.google.com/apppasswords
+#Para poder hacer lo de arriba deben activar la verificación en dos de su cuenta de Google en  https://myaccount.google.com/security
+EMAIL_HOST_PASSWORD = "jxii rhzf rfnh hrwz"

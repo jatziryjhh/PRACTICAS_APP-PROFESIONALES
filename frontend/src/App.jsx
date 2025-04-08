@@ -10,6 +10,8 @@ import NotFound from "./pages/404";
 import CustomUserForm from "./components/NewUser";
 import "bootstrap/dist/css/bootstrap.min.css";
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import Recuperar from "./components/Recuperar";
+import ResetPassword from "./components/ResetPassword";
 
 import { motion } from "framer-motion";
 {/* Forma de navegar con animaciones */}
@@ -23,6 +25,8 @@ const AnimatedRoutes = () => {
         <Route path='/' element={<Home />} />
         <Route path='/about' element={<AboutUs />} />
         <Route path='/register' element={<CustomUserForm />} />
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
+        <Route path="/recuperar" element={<Recuperar />} />
         <Route path='*' element={<NotFound />} />
       </Routes>
     </AnimatePresence>
